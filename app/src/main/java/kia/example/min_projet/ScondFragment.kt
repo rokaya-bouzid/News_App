@@ -39,7 +39,7 @@ class ScondFragment : Fragment() {
                 Picasso.get().load(it).into(binding.imageId)
             }
 
-            binding.btnFavorite.setOnClickListener {
+            binding.fab.setOnClickListener {
                 Log.d("ScondFragment", "Button clicked")
 
                 if (user != null) {

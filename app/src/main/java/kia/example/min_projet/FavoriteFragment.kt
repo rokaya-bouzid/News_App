@@ -81,25 +81,20 @@ class FavoriteFragment : Fragment(),adapter1.onclick {
                     articleList.add(article)
                 } while (cursor.moveToNext())
             }
-
-// N'oubliez pas de fermer le curseur une fois que vous avez fini de l'utiliser
             cursor?.close()
             val recyclerView = binding.rtl
             recyclerView?.adapter = adapter1(articleList,this)
             val layoutManager = LinearLayoutManager(requireContext())
             recyclerView?.layoutManager = layoutManager
-
-
-
-
-
     }
+
+
+
         return binding.root;}
 
     override fun onclickitem(position: Article1) {
         val action=FavoriteFragmentDirections.actionFavoriteFragmentToFavDeatailsFragment(position)
         requireView().findNavController().navigate(action)
-
     }
 
     override fun onImageButtonClick(article: Article1) {

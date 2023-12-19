@@ -15,7 +15,7 @@
             android:fontFamily="cursive"
             android:text="Search."
             android:textColor="@color/purple"
-            android:textSize="30sp"
+            android:textSize="34sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -24,6 +24,8 @@
             android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="70dp"
             android:background="@drawable/search_border"
             android:drawableEnd="@drawable/baseline_search_24"
             android:drawableTint="@color/purple"
@@ -31,16 +33,18 @@
             android:hint="Search news..."
             android:minHeight="48dp"
             android:padding="10dp"
+            android:layout_marginEnd="8dp"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.120000005" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
