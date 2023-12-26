@@ -1,6 +1,7 @@
 package kia.example.min_projet
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -19,11 +20,19 @@ import kia.example.min_projet.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var auth: FirebaseAuth
-    private lateinit var binding:ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        // Initialiser sharedPreferences
+        sharedPreferences = getPreferences(MODE_PRIVATE)
+
+        // Appliquer le mode nuit enregistré
+        applySavedNightMode()
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
@@ -32,18 +41,38 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController)
     }
 
-    fun dark(item: MenuItem) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+    private fun applySavedNightMode() {
+        val savedNightMode = sharedPreferences.getInt("night_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        AppCompatDelegate.setDefaultNightMode(savedNightMode)
     }
-    fun logout(item: MenuItem){
+
+    private fun saveNightMode(mode: Int) {
+        with(sharedPreferences.edit()) {
+            putInt("night_mode", mode)
+            apply()
+        }
+    }
+
+    fun dark(item: MenuItem) {
+        val currentNightMode = AppCompatDelegate.getDefaultNightMode()
+
+        val newNightMode = when (currentNightMode) {
+            AppCompatDelegate.MODE_NIGHT_YES -> AppCompatDelegate.MODE_NIGHT_NO
+            else -> AppCompatDelegate.MODE_NIGHT_YES
+        }
+
+        AppCompatDelegate.setDefaultNightMode(newNightMode)
+        saveNightMode(newNightMode)
+    }
+
+    fun logout(item: MenuItem) {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent)
-
+            finish() // Ajouter cette ligne si vous voulez fermer l'activité actuelle après le changement d'activité
         }
-
     }
-
 }
+
