@@ -4,35 +4,30 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.squareup.picasso.Picasso
-import kia.example.min_projet.databinding.Items1Binding
+
 import kia.example.min_projet.databinding.ItemsBinding
 
 
 class adapter1(var list:List<Article1>,private val listener:adapter1.onclick): RecyclerView.Adapter<adapter1.holder1>() {
-    inner class holder1(val binding:Items1Binding): ViewHolder(binding.root){
+    inner class holder1(val binding:ItemsBinding): ViewHolder(binding.root){
 
         init {
             binding.root.setOnClickListener {val position1=adapterPosition
                 if(position1!=RecyclerView.NO_POSITION){
                     listener.onclickitem(list[position1])
                 } }
-            binding.imageButton.setOnClickListener {
-                val position1 = adapterPosition
-                if (position1 != RecyclerView.NO_POSITION) {
-                    listener.onImageButtonClick(list[position1])
-                }
-            }
+
         }
 
     }
     interface onclick{
         fun onclickitem(position:Article1);
-        fun onImageButtonClick(article: Article1)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holder1 {
         var tmp=LayoutInflater.from(parent.context)
-        var item=Items1Binding.inflate(tmp,parent,false)
+        var item=ItemsBinding.inflate(tmp,parent,false)
         return holder1(item)
     }
 
@@ -52,4 +47,11 @@ class adapter1(var list:List<Article1>,private val listener:adapter1.onclick): R
             Picasso.get().load(news.urlToImage).into( holder.binding.cardImageView)
         }
     }
+    fun removeItem(position: Int) {
+        val mutableList = list.toMutableList()
+        mutableList.removeAt(position)
+        list = mutableList.toList()
+        notifyItemRemoved(position)
+    }
+
 }

@@ -30,8 +30,9 @@ class ScondFragment : Fragment() {
             binding = FragmentScondBinding.inflate(inflater, container, false)
 
             binding.textTitle.text = receivedArticle.title
-            binding.auth.text = receivedArticle.author
-            binding.time.text = receivedArticle.publishedAt
+            binding.source.text=receivedArticle.source.name
+
+            binding.publ.text=receivedArticle.publishedAt
             binding.detail.text = receivedArticle.description
             binding.content.text = receivedArticle.content
 

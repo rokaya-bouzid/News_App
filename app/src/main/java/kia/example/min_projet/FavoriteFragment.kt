@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import kia.example.min_projet.databinding.FragmentFavoriteBinding
 import kia.example.min_projet.databinding.FragmentScondBinding
@@ -28,8 +30,8 @@ class FavoriteFragment : Fragment(),adapter1.onclick {
 
         // Vérifier si receivedArticle n'est pas null avant d'accéder à ses propriétés
 
-            dbHelper = ArticleHelper(requireContext())
-            binding = FragmentFavoriteBinding.inflate(inflater, container, false)
+        dbHelper = ArticleHelper(requireContext())
+        binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         if (user != null) {
             val uid = user.uid
             val cursor = dbHelper.selectArticlesByUserId(uid)
@@ -66,7 +68,7 @@ class FavoriteFragment : Fragment(),adapter1.onclick {
 
                     // Créez un nouvel objet Article avec toutes les valeurs du curseur
                     val article = Article1(
-                        id=id,
+                        id = id,
                         title = title,
                         description = description,
                         author = author,
@@ -83,30 +85,42 @@ class FavoriteFragment : Fragment(),adapter1.onclick {
             }
             cursor?.close()
             val recyclerView = binding.rtl
-            recyclerView?.adapter = adapter1(articleList,this)
+            recyclerView?.adapter = adapter1(articleList, this)
             val layoutManager = LinearLayoutManager(requireContext())
             recyclerView?.layoutManager = layoutManager
+
+            // Ajouter le support ItemTouchHelper ici
+            val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            ) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+                    val article = articleList[position]
+                    dbHelper.deleteArticle(article.id)
+                    (binding.rtl.adapter as? adapter1)?.removeItem(position)
+                }
+            })
+
+            itemTouchHelper.attachToRecyclerView(recyclerView)
+        }
+
+        return binding.root
     }
 
-
-
-        return binding.root;}
-
     override fun onclickitem(position: Article1) {
-        val action=FavoriteFragmentDirections.actionFavoriteFragmentToFavDeatailsFragment(position)
+        val action = FavoriteFragmentDirections.actionFavoriteFragmentToFavDeatailsFragment(position)
         requireView().findNavController().navigate(action)
     }
 
-    override fun onImageButtonClick(article: Article1) {
-        dbHelper.deleteArticle(article.id)
-        val navController = findNavController()
-        navController.navigate(R.id.action_favoriteFragment_self)
 
-
-
-
-    }
 }
-
-
 
