@@ -20,13 +20,7 @@
         android:title="Search"
         android:id="@+id/searchFragment"
         android:icon="@drawable/baseline_search_24"/>
-    <item
-        android:id="@+id/light"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@drawable/baseline_light_mode_24"
-        android:onClick="light"
-        android:title="light" />
+
 
     <item
         android:id="@+id/dark"
@@ -35,5 +29,13 @@
         android:icon="@drawable/baseline_dark_mode_24"
         android:onClick="dark"
         android:title="dark" />
+    <item
+        android:id="@+id/light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/baseline_logout_24"
+        android:onClick="logout"
+        android:title="light" />
+
 
 </menu>
